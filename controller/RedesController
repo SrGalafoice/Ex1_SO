@@ -1,0 +1,91 @@
+package controller;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+public class RedesController {
+    static StringBuilder processo = new StringBuilder();
+    static String SO = os();
+    public RedesController(){
+        super();
+    }
+    // 1a questao
+    private static String os(){
+       String os = System.getProperty("os.name");
+       if (os.contains("Windows")){
+         return "W"; // de Windows
+       }
+       else return "L"; // de Linux
+    }
+    // 2a questao
+    public static void CONFERIR(){
+        System.out.println(SO);
+    }
+    public static void ip() {
+        if (SO.equals("W")) {
+            processo.append("ipconfig");
+        } else processo.append("ip addr");
+        try {
+            Process p = Runtime.getRuntime().exec(processo.toString());
+            InputStream fluxo = p.getInputStream();
+            InputStreamReader leitor = new InputStreamReader(fluxo);
+            BufferedReader buffer = new BufferedReader(leitor);
+
+            String linha, PalavraIp;
+            while ((linha = buffer.readLine()) != null) {
+                if (SO.equals("W")) {
+                    String[] palavras = linha.split(":");
+                    PalavraIp = palavras[0];
+                    if (PalavraIp.contains("IPv4")) {
+                        System.out.println("Endereço IPv4:" + palavras[1]);
+                    }
+                } else {
+                    linha = linha.trim();
+                    String[] palavras = linha.split(" ");
+                    PalavraIp = palavras[0];
+                    if (PalavraIp.contains("inet") && !PalavraIp.contains("inet6")) {
+                        System.out.println("Endereço IPv4: " + palavras[1]);
+                    }
+                }
+            }
+
+            buffer.close();
+            leitor.close();
+            fluxo.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    // 3a questao
+    public static void ping(){
+        if (SO.equals("W")) {
+            processo.append("ping -4 -n 10 www.google.com.br");
+        } else processo.append("ping -4 -c 10 www.google.com.br");
+        try {
+            Process p = Runtime.getRuntime().exec(processo.toString());
+            InputStream fluxo = p.getInputStream();
+            InputStreamReader leitor = new InputStreamReader(fluxo);
+            BufferedReader buffer = new BufferedReader(leitor);
+
+
+            String linha, ultima = "";
+            while ((linha = buffer.readLine()) != null) {
+                ultima = linha;
+            }
+
+            buffer.close();
+            leitor.close();
+            fluxo.close();
+            if (SO.equals("W")) {
+                String[] split = ultima.split(" = ");
+                System.out.println("Média = " + split[split.length - 1]);
+            } else {
+                String[] split = ultima.split("/");
+                System.out.println("Média = " + split[split.length - 3]);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+}
