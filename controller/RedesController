@@ -19,9 +19,6 @@ public class RedesController {
        else return "L"; // de Linux
     }
     // 2a questao
-    public static void CONFERIR(){
-        System.out.println(SO);
-    }
     public static void ip() {
         if (SO.equals("W")) {
             processo.append("ipconfig");
