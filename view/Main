@@ -1,0 +1,28 @@
+package view;
+import controller.RedesController;
+
+import java.util.Scanner;
+
+import static controller.RedesController.CONFERIR;
+
+public class Main {
+    // Não cheguei a usar JOptionPane antes :(
+    public static void main(String[] args) {
+        Scanner leia = new Scanner(System.in);
+        int x = 0;
+        while (x != 9){
+            System.out.println("---------------------------------------------------------------");
+            System.out.println("|\tMENU\t               \t|");
+            System.out.println("| 1 - Mostrar ip\t\t\t|");
+            System.out.println("| 2 - Mostrar ping (www.google.com.br) \t|");
+            System.out.println("| 9 - Finaliza \t\t   \t\t              |");
+            System.out.println("----------------------------------------------------------------");
+            System.out.println("Qual opção deseja escolher? ");
+            x = leia.nextInt();
+            switch(x){
+                case 1 -> RedesController.ip();
+                  case 2 -> RedesController.ping();
+            }
+        }
+    }
+}
